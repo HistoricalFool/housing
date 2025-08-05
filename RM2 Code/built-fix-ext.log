@@ -1,0 +1,181 @@
+
+
+. ************************************************
+. * built-fix.dta                                *
+. * Author: Tate Mason - dmason27@uncc.edu       *
+. * Date: Jan 19, 2024                           *
+. ************************************************
+. 
+.         #delimit cr             
+delimiter now cr
+.         clear                           
+
+.         clear all                       
+
+.         set more off    
+
+.         
+.                 local rootPath "/Volumes/Tate's Pass/mason/housing/"
+
+.                 
+.                 local codePath "`rootPath'/RM2 Code/"
+
+.                 local dataPath "`rootPath'/RM2-Data/"
+
+.                 local outputPath "`rootPath'/output/"
+
+.         
+. *************************************
+. * Dropping NA's in builtyr/builtyr2 *
+. *************************************
+. 
+.         use "`dataPath'/IPUMS-USA_Extension.dta", clear
+
+.         
+.         replace builtyr = . if builtyr == 0
+(1 real change made, 1 to missing)
+
+.         replace builtyr2 = . if builtyr2 == 0
+(0 real changes made)
+
+.         
+.         gen yrbuilt = .
+(22,765,226 missing values generated)
+
+. 
+. *************************************
+. * Replacing and Formatting Codes    *
+. *************************************           
+.                 //Builtyr variable used from 1960-2000 in sample
+.         replace yrbuilt = 65 if builtyr == 9
+(999,714 real changes made)
+
+.         replace yrbuilt = 55 if builtyr == 8
+(1,497,227 real changes made)
+
+.         replace yrbuilt = 45 if builtyr == 7
+(2,486,179 real changes made)
+
+.         replace yrbuilt = 35 if builtyr == 6
+(3,924,240 real changes made)
+
+.         replace yrbuilt = 25 if builtyr == 5
+(3,301,273 real changes made)
+
+.         replace yrbuilt = 15 if builtyr == 4
+(3,723,401 real changes made)
+
+.         replace yrbuilt = 8 if builtyr == 3
+(2,095,415 real changes made)
+
+.         replace yrbuilt = 3 if builtyr == 2
+(1,792,323 real changes made)
+
+.         replace yrbuilt = 1 if builtyr == 1
+(493,035 real changes made)
+
+.                 
+.                 //Builtyr2 variable used 2010 and 2019 in sample
+.                         //2010
+.         replace yrbuilt = 1 if builtyr2 == 15 & year==2010 | builtyr2 == 14 & year == 2010
+(6,216 real changes made)
+
+.         replace yrbuilt = 3 if builtyr2 == 13 & year == 2010 | builtyr2 == 12 & year == 2010 |          builtyr2 ==
+>  11 & year == 2010 | builtyr2 == 10 & year == 2010
+(71,009 real changes made)
+
+.         replace yrbuilt = 8 if builtyr2 == 9 & year == 2010 | builtyr2 == 8 & year == 2010
+(93,226 real changes made)
+
+.         replace yrbuilt = 15 if builtyr2 == 7 & year == 2010
+(165,305 real changes made)
+
+.         replace yrbuilt = 25 if builtyr2 == 6 & year == 2010
+(161,678 real changes made)
+
+.         replace yrbuilt = 35 if builtyr2 == 5 & year == 2010
+(189,855 real changes made)
+
+.         replace yrbuilt = 45 if builtyr2 == 4 & year == 2010
+(134,959 real changes made)
+
+.         replace yrbuilt = 55 if builtyr2 == 3 & year == 2010
+(136,809 real changes made)
+
+.         replace yrbuilt = 65 if builtyr2 == 2 & year == 2010 | builtyr2 == 1 & year == 2010
+(230,885 real changes made)
+
+.                 
+.                         //2019
+.         replace yrbuilt = 1 if builtyr2 == 24 & year == 2019 | builtyr2 == 23 & year == 2019
+(8,597 real changes made)
+
+.         replace yrbuilt = 3 if builtyr2 == 22 & year == 2019 | builtyr2 == 21 & year == 2019 | builtyr2 == 20 & yea
+> r == 2019 | builtyr2 == 19 & year == 2019
+(40,715 real changes made)
+
+.         replace yrbuilt = 8 if builtyr2 == 18 & year == 2019 | builtyr2 == 17 & year == 2019 | builtyr2 == 16 & yea
+> r == 2019 | builtyr2 == 15 & year == 2019 | builtyr2 == 14 & year == 2019
+(38,990 real changes made)
+
+.         replace yrbuilt = 15 if builtyr2 == 13 & year == 2019 | builtyr2 == 12 & year == 2019 | builtyr2 == 11 & ye
+> ar == 2019 | builtyr2 == 10 & year == 2019 | builtyr2 == 9 & year == 2019 
+(149,563 real changes made)
+
+.         replace yrbuilt = 25 if builtyr2 == 7 & year == 2019 
+(174,531 real changes made)
+
+.         replace yrbuilt = 35 if builtyr2 == 6 & year == 2019
+(167,074 real changes made)
+
+.         replace yrbuilt = 45 if builtyr2 == 5 & year == 2019
+(191,153 real changes made)
+
+.         replace yrbuilt = 55 if builtyr2 == 4 & year == 2019
+(134,107 real changes made)
+
+.         replace yrbuilt = 65 if builtyr2 == 3 & year == 2019 | builtyr2 == 2 & year == 2019 | builtyr2 == 1 & year 
+> == 2019
+(357,746 real changes made)
+
+.                 
+.         
+. *************************************
+. * Formatting Bedrooms               *
+. *************************************
+.         gen newrooms = .
+(22,765,226 missing values generated)
+
+. 
+.         replace bedrooms = . if bedrooms == 0
+(2,487,441 real changes made, 2,487,441 to missing)
+
+.         replace newrooms = 0 if bedrooms == 1
+(410,819 real changes made)
+
+.         replace newrooms = 1 if bedrooms == 2
+(2,423,558 real changes made)
+
+.         replace newrooms = 2 if bedrooms == 3
+(5,796,722 real changes made)
+
+.         replace newrooms = 3 if bedrooms == 4
+(8,095,351 real changes made)
+
+.         replace newrooms = 4 if bedrooms == 5
+(2,815,853 real changes made)
+
+.         replace newrooms = 5 if bedrooms >= 6
+(3,222,923 real changes made)
+
+.         
+. *************************************
+. * Saving Dataset                    *
+. *************************************   
+.         save `data'/IPUMS-USA_Extension-correct.dta, replace
+(file /IPUMS-USA_Extension-correct.dta not found)
+file /IPUMS-USA_Extension-correct.dta could not be opened
+r(603);
+
+end of do-file
+r(603);
