@@ -9,7 +9,7 @@
 	clear all			
 	set more off	
 	
-		local rootPath "/Volumes/Tate's Pass/mason/housing/"
+		local rootPath "/Volumes/TD1/mason/housing/"
 		
 		local codePath "`rootPath'/RM2 Code/"
 		local dataPath "`rootPath'/RM2-Data/"
@@ -80,7 +80,7 @@
 *************************************
 * Saving Dataset                    *
 *************************************	
-	save `data'/IPUMS-USA_Extension-correct.dta, replace
+	save "`data'IPUMS-USA_Extension-correct.dta", replace
 	
 	
 	

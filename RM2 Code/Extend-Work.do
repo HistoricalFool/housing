@@ -15,8 +15,8 @@
 	
 	//Data Paths
 	
-  local data "/Volumes/Tate's Pass/mason/housing/RM2-Data"
-	local output "/Users/tate/Library/CloudStorage/Dropbox/mason/housing/RM2-Output/output/"
+  local data "/Volumes/TD1/mason/housing/RM2-Data"
+	local output "/Volumes/TD1/mason/housing/output/"
 	
 	log using `output'/RM2_output.txt, replace
 	
@@ -206,7 +206,7 @@ if `gapReg'{
 				
 			}
 		}
-		save "//`data'//graph_gap.dta", replace
+		save "`data'/graph_gap.dta", replace
 	}
 /********************************
 * 5. Graphing                   *
@@ -302,7 +302,7 @@ if `doGraph' {
 				legend(ring(0) pos(1) col(1))
 				;
 				#delimit cr
-				graph export `output'/`r'_2a.pdf, as(pdf) name(`r'_Fig2a) replace
+				graph export "`output'/`r'_2a.pdf", as(pdf) name(`r'_Fig2a) replace
 				
 				#delimit
 				binscatter valuep incp [aw=hhwt],
@@ -316,7 +316,7 @@ if `doGraph' {
 				legend (ring(0) pos(1) col(1))
 				;
 				#delimit cr
-				graph export `output'/`r'_2c.pdf, as(pdf) name(`r'_Fig2c) replace
+				graph export "`output'/`r'_2c.pdf", as(pdf) name(`r'_Fig2c) replace
 				
 				gen own100 = 100*(1-renter)
 				
@@ -332,7 +332,7 @@ if `doGraph' {
 				legend (ring(0) pos(1) col(1))
 				;
 				#delimit cr
-				graph export `output'/`r'_2e.pdf, as(pdf) name(`r'_Fig2e) replace
+				graph export "`output'/`r'_2e.pdf", as(pdf) name(`r'_Fig2e) replace
 			restore	
 		}
 	}		

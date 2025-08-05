@@ -18,7 +18,7 @@
 		clear all			//clear all variables in memory
 		set more off		//turn the "more" option for screen output off
 
-		local rootPath "/Volumes/Tate's Pass/mason/housing/"
+		local rootPath "/Volumes/TD1/mason/housing/"
 		
 		local codePath "`rootPath'/RM2 Code/"
 		local dataPath "`rootPath'/RM2-Data/"
@@ -419,7 +419,7 @@
 	* (4) Plot Graphs
 	*****************************************************************/
 		
-		local rootPath "/Volumes/Tate's Pass/mason/housing/"
+		local rootPath "/Volumes/TD1/mason/housing/"
 		
 		local codePath "`rootPath'/RM2 Code/"
 		local dataPath "`rootPath'/RM2-Data/"
