@@ -67,13 +67,13 @@ delimiter now cr
 
 .                 
 .                 local codePath "`rootPath'/RM2 C
-> ode/"
+> ode"
 
 .                 local dataPath "`rootPath'/RM2-D
-> ata/"
+> ata"
 
 .                 local outputPath "`rootPath'/out
-> put/"
+> put"
 
 .                 
 .                 
@@ -612,9 +612,9 @@ variable metarea was int now long
 .                                         local he
 > ad_vars "renter rent rentgrs valueh age chinese 
 > japanese filipino indian korean vietnamese asian
->  black educ occ1990 ind1990 statefip metro metar
-> ea farm hhtype sex builtyr builtyr2 bedrooms cit
-> y yrimmig hotspot"
+>  black educ statefip metro metarea farm hhtype s
+> ex builtyr builtyr2 bedrooms city yrimmig hotspo
+> t"
 .                                         //Have b
 > een including the statefip and metarea variables
 >  as they are in the control vector. Unsure how t
@@ -658,7 +658,7 @@ variable metarea was int now long
 > ng)
 (47,568,789 real changes made, 47,568,789 to missi
 > ng)
-variable occ1990 not found
+variable statefip not found
 r(111);
 .                                 
 .                                 
@@ -698,9 +698,5 @@ r(111);
 > (year,1960, 2019)
 .                                 
 .                                 save "`dataPath'
-> IPUMS-USA_Extension.dta", replace
+> /IPUMS-USA_Extension.dta", replace
 .   }
-r(111);
-
-end of do-file
-r(111);

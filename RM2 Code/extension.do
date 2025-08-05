@@ -20,9 +20,9 @@
 
 		local rootPath "/Volumes/TD1/mason/housing/"
 		
-		local codePath "`rootPath'/RM2 Code/"
-		local dataPath "`rootPath'/RM2-Data/"
-		local outputPath "`rootPath'/output/"
+		local codePath "`rootPath'/RM2 Code"
+		local dataPath "`rootPath'/RM2-Data"
+		local outputPath "`rootPath'/output"
 		
 		
 		
@@ -383,7 +383,7 @@
 								
 				//keep if inlist(year,1960, 2019)
 				
-				save "`dataPath'IPUMS-USA_Extension.dta", replace
+				save "`dataPath'/IPUMS-USA_Extension.dta", replace
   }
 		
 					
@@ -391,7 +391,7 @@
 	* (3) Create variables for plots
 	*****************************************************************/
 			
-			use "`dataPath'IPUMS-USA_Extension", clear
+			use "`dataPath'/IPUMS-USA_Extension", clear
 			
 			keep if inlist(year,1980, 2019)
 			
@@ -450,7 +450,7 @@
 			legend(ring(0) pos(1) col(1))
 			;
 			#delimit cr
-			graph export `outputPath'`r'_extend_rentsumm`y'.pdf, as(pdf) replace name(`r'_rent_inc`y')
+			graph export "`outputPath'`r'_extend_rentsumm`y'.pdf", as(pdf) replace name(`r'_rent_inc`y')
 			
 			#delimit ;
 			binscatter hval_inc inctot_trimmed if year==`y' & renter==0 [aw=hhwt],
@@ -464,7 +464,7 @@
 			legend(ring(0) pos(1) col(1))
 			;
 			#delimit cr
-			graph export `outputPath'`r'_extend_valuesumm`y'.pdf, as(pdf) replace name(`r'_hval_inc`y')
+			graph export "`outputPath'`r'_extend_valuesumm`y'.pdf", as(pdf) replace name(`r'_hval_inc`y')
 			
 			#delimit ;
 			binscatter own100 inctot_trimmed if year==`y' [aw=hhwt],
@@ -478,7 +478,7 @@
 			legend(ring(0) pos(1) col(1))
 			;
 			#delimit cr
-			graph export `outputPath'`r'_extend_ownsumm`y'.pdf, as(pdf) replace name(`r'_owner`y') 
+			graph export "`outputPath'`r'_extend_ownsumm`y'.pdf", as(pdf) replace name(`r'_owner`y') 
 		}
   }
 		
