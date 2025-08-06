@@ -391,7 +391,7 @@
 	* (3) Create variables for plots
 	*****************************************************************/
 			
-			use "`dataPath'/IPUMS-USA_Extension", clear
+			use "`dataPath'/IPUMS-USA_Extension.dta", clear
 			
 			keep if inlist(year,1980, 2019)
 			
@@ -419,7 +419,7 @@
 	* (4) Plot Graphs
 	*****************************************************************/
 		
-		local rootPath "/Volumes/TD1/mason/housing/"
+		local rootPath "/Volumes/TD1/mason/housing"
 		
 		local codePath "`rootPath'/RM2 Code/"
 		local dataPath "`rootPath'/RM2-Data/"

@@ -101,7 +101,7 @@ delimiter now cr
 
 .                 if `readRaw' {
 .                 
-.                         use "`dataPath'/usa_0003
+.                         use "`dataPath'/usa_0002
 > 5.dta", clear //with education and occ
 .                         keep if inlist(gq,1,2,5)
 >  //drop peopel in group quarters
@@ -612,9 +612,9 @@ variable metarea was int now long
 .                                         local he
 > ad_vars "renter rent rentgrs valueh age chinese 
 > japanese filipino indian korean vietnamese asian
->  black educ statefip metro metarea farm hhtype s
-> ex builtyr builtyr2 bedrooms city yrimmig hotspo
-> t"
+>  black educ occ1990 ind1990 statefip metro metar
+> ea farm hhtype sex builtyr builtyr2 bedrooms cit
+> y yrimmig hotspot"
 .                                         //Have b
 > een including the statefip and metarea variables
 >  as they are in the control vector. Unsure how t
@@ -658,8 +658,34 @@ variable metarea was int now long
 > ng)
 (47,568,789 real changes made, 47,568,789 to missi
 > ng)
-variable statefip not found
-r(111);
+(47,568,789 real changes made, 47,568,789 to missi
+> ng)
+(47,568,789 real changes made, 47,568,789 to missi
+> ng)
+(47,568,789 real changes made, 47,568,789 to missi
+> ng)
+(42,120,893 real changes made, 42,120,893 to missi
+> ng)
+(45,508,186 real changes made, 45,508,186 to missi
+> ng)
+(47,568,789 real changes made, 47,568,789 to missi
+> ng)
+(47,568,789 real changes made, 47,568,789 to missi
+> ng)
+(47,568,789 real changes made, 47,568,789 to missi
+> ng)
+(12,779,260 real changes made, 12,779,260 to missi
+> ng)
+(44,893,786 real changes made, 44,893,786 to missi
+> ng)
+(46,231,366 real changes made, 46,231,366 to missi
+> ng)
+(42,120,893 real changes made, 42,120,893 to missi
+> ng)
+(46,231,366 real changes made, 46,231,366 to missi
+> ng)
+(47,568,789 real changes made, 47,568,789 to missi
+> ng)
 .                                 
 .                                 
 .                         /***********************
@@ -675,21 +701,27 @@ r(111);
 .                                 
 .                                 keep if inctot>0
 >  //only keep households with positive income
+(362,983 observations deleted)
 .                                 keep if year>=19
 > 40 //no house values/rents in 1950
+(0 observations deleted)
 .                                 
 .                                 replace rent = .
 >  if !renter //rent only for renters
+(0 real changes made)
 .                                 //replace rent =
 >  . if rent<=0 //rent only if >0
 .                                 
 .                                 replace rentgrs 
 > = . if !renter //rent only for renters
+(21,807,454 real changes made, 21,807,454 to missi
+> ng)
 .                                 //replace rentgr
 > s = . if rentgrs<=0 //rent only if >0
 .                                 
 .                                 replace valueh =
 >  . if renter //house value only if not renter
+(0 real changes made)
 .                                 //replace valueh
 >  = . if valueh<=0 //house value only if >0
 .                                                 
@@ -699,4 +731,212 @@ r(111);
 .                                 
 .                                 save "`dataPath'
 > /IPUMS-USA_Extension.dta", replace
+file
+    /Volumes/TD1/mason/housing//RM2-Data/IPUMS-U
+    > SA_Extension.dta saved
 .   }
+
+.                 
+.                                         
+.         /***************************************
+> **************************
+>         * (3) Create variables for plots
+>         ****************************************
+> *************************/
+.                         
+.                         use "`dataPath'/IPUMS-US
+> A_Extension.dta", clear
+
+.                         
+.                         keep if inlist(year,1980
+> , 2019)
+(29,413,489 observations deleted)
+
+.                         
+.                         gen rent_inc = 100*rentg
+> rs/(inctot/12) if inctot>0
+(903,439 missing values generated)
+
+.                         gen hval_inc = valueh/(i
+> nctot/12) if inctot>0
+(359,037 missing values generated)
+
+.                         
+.                         //windsorize ratios (dro
+> p below 5th and above 95th percentile)
+.                                 local vars "rent
+> _inc hval_inc"
+
+.                                 winsor2 `vars' ,
+>  by(year) cuts(5 95) replace
+
+.                                 
+.                         
+.                                 
+.                         //trim income for plots
+.                                 winsor2 inctot ,
+>  by(year) suffix(_trimmed) cuts(1 99)
+
+.                                 sum incot*
+
+    Variable |        Obs        Mean    Std. dev.
+>        Min        Max
+-------------+------------------------------------
+> ---------------------
+    incother |  1,262,476    23859.65    48913.71 
+>      -8000    1129000
+
+.                                 replace inctot_t
+> rimmed = . if inctot_trimmed != inctot
+(25,216 real changes made, 25,216 to missing)
+
+.                                 
+.                         //fraction of owners
+.                         gen own100 = 100*(1-rent
+> er)
+
+.                         
+.                         
+.                         by year: sum  inctot* re
+> nt rentgrs rent_* own* hval* valueh
+
+--------------------------------------------------
+-> year = 2019
+
+    Variable |        Obs        Mean    Std. dev.
+>        Min        Max
+-------------+------------------------------------
+> ---------------------
+      inctot |  1,262,476    96390.62      104571 
+>          4    2907600
+inctot_tri~d |  1,237,260    90992.27    82062.82 
+>       2750     554000
+        rent |    337,261    1077.348    682.6945 
+>          4       4000
+     rentgrs |    359,037    1157.804    739.0051 
+>          0       4907
+    rent_inc |    359,037      37.473    33.79761 
+>          0   139.8347
+-------------+------------------------------------
+> ---------------------
+      own100 |  1,262,476    71.56089    45.11241 
+>          0        100
+    hval_inc |    903,439    48.25736    45.57743 
+>        7.2   187.9518
+      valueh |    903,439    334906.4    448113.4 
+>       1000    7681000
+
+
+.                         
+.         /***************************************
+> **************************
+>         * (4) Plot Graphs
+>         ****************************************
+> *************************/
+.                 
+.                 local rootPath "/Volumes/TD1/mas
+> on/housing"
+
+.                 
+.                 local codePath "`rootPath'/RM2 C
+> ode/"
+
+.                 local dataPath "`rootPath'/RM2-D
+> ata/"
+
+.                 local outputPath "`rootPath'/out
+> put/"
+
+.                 
+.                 label variable rent_inc "Rent/In
+> come (%)"
+
+.                 label variable hval_inc "House V
+> alue/Income (%)"
+
+.                 label variable own100 "Ownership
+>  Rate (%)"
+
+.                 label variable inctot_trimmed "H
+> ousehold Income (trimmed)"
+
+.                 
+.                 graph drop _all
+
+.                 local nq=30
+
+.                 local years "1980 2019"
+
+.                 local races "asian chinese japan
+> ese korean indian vietnamese filipino black"
+
+.                 
+.         foreach r of local races {
+  2.                 foreach y of local years {
+  3.                         
+.                         #delimit ;
+delimiter now ;
+.                         binscatter rent_inc inct
+> ot_trimmed if year==`y' & renter==1 [aw=hhwt],
+>                         by(`r')
+>                         n(`nq')
+>                         linetype(none)
+>                         name(`r'_rent_inc`y')
+>                         title("`y' Rent/Income R
+> atio")
+>                         xtitle("Income")
+>                         ytitle("Rent-to-income(%
+> )")
+>                         legend(ring(0) pos(1) co
+> l(1))
+>                         ;
+  4.                         #delimit cr
+delimiter now cr
+.                         graph export "`outputPat
+> h'`r'_extend_rentsumm`y'.pdf", as(pdf) replace n
+> ame(`r'_rent_inc`y')
+  5.                         
+.                         #delimit ;
+delimiter now ;
+.                         binscatter hval_inc inct
+> ot_trimmed if year==`y' & renter==0 [aw=hhwt],
+>                         by(`r')
+>                         n(`nq')
+>                         linetype(none)
+>                         name(`r'_hval_inc`y')
+>                         title("`y' House Value/I
+> ncome")
+>                         xtitle("Income")
+>                         ytitle("Value-to-income 
+> Ratio")
+>                         legend(ring(0) pos(1) co
+> l(1))
+>                         ;
+  6.                         #delimit cr
+delimiter now cr
+.                         graph export "`outputPat
+> h'`r'_extend_valuesumm`y'.pdf", as(pdf) replace 
+> name(`r'_hval_inc`y')
+  7.                         
+.                         #delimit ;
+delimiter now ;
+.                         binscatter own100 inctot
+> _trimmed if year==`y' [aw=hhwt],
+>                         by(`r')
+>                         n(`nq')
+>                         linetype(none)
+>                         name(`r'_owner`y')
+>                         title("`y' Ownership Rat
+> e")
+>                         xtitle("Income")
+>                         ytitle("Ownership rate")
+>                         legend(ring(0) pos(1) co
+> l(1))
+>                         ;
+  8.                         #delimit cr
+delimiter now cr
+.                         graph export "`outputPat
+> h'`r'_extend_ownsumm`y'.pdf", as(pdf) replace na
+> me(`r'_owner`y') 
+  9.                 }
+ 10.   }
