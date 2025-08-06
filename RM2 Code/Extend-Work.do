@@ -20,10 +20,10 @@
 	
 	log using `output'/RM2_output.txt, replace
 	
-	local prepRaw = 1
-	local prepDec = 1
-	local prepDummies = 1
-	local prepDecDummies = 1
+	local prepRaw = 0
+	local prepDec = 0
+	local prepDummies = 0
+	local prepDecDummies = 0
 	local gapReg = 1
 	local doGraph = 1
 	local gapGraph = 1
@@ -182,7 +182,7 @@ if `gapReg'{
 			
 			
 			local vars "rentgrs valueh own100"
-			local controls "educ age sex hhtype farm metarea statefip city yearimmig"
+			local controls "educ age sex hhtype farm metarea statefip city yrimmig"
 			local years "1980,1990,2000,2010,2019"
 			
 			sum `controls'
