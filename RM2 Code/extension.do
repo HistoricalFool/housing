@@ -42,7 +42,7 @@
 		local readRaw 1
 		if `readRaw' {
 		
-			use "`dataPath'/usa_00035.dta", clear //with education and occ
+			use "`dataPath'/usa_00025.dta", clear //with education and occ
 			keep if inlist(gq,1,2,5) //drop peopel in group quarters
 			
 			/*
