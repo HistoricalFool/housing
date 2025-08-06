@@ -80,7 +80,7 @@
 *************************************
 * Saving Dataset                    *
 *************************************	
-	save "`data'/IPUMS-USA_Extension-correct.dta", replace
+	save "`dataPath'/IPUMS-USA_Extension-correct.dta", replace
 	
 	
 	
