@@ -212,7 +212,7 @@ if `gapReg'{
 * 5. Graphing                   *
 ********************************/	
 if `doGraph' {
-	use "//`data'//graph_gap.dta", clear
+	use "`data'graph_gap.dta", clear
 	local races "asian chinese japanese korean vietnamese filipino indian black"
 	foreach r of local races {
     preserve
