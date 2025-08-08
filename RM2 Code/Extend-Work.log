@@ -276,3 +276,317 @@ delimiter now cr
 > ********************************/       
 . if `doGraph' {
 .         use "`data'/graph_gap.dta", clear
+.         local races "asian chinese japanese korean vietnamese filipino indian black"
+.         foreach r of local races {
+  2.     preserve
+  3.     //collapse saved coefficients by year
+.       collapse `r'_rgap*, by(year)
+  4.   
+.     //plot saved coefficients
+.       tsset year
+  5.     
+.     
+.       graph drop _all
+  6.   
+.       local vars "rentgrs valueh own100"
+  7.       foreach v of local vars {
+  8.       
+.         if "`v'"=="rentgrs" {
+  9.           local ylab "`r'/Non-`r' Rent Rank Gap"
+ 10.         }
+ 11.         else if "`v'"=="valueh" {
+ 12.           local ylab "`r'/Non-`r' House Price Rank Gap"
+ 13.         }
+ 14.         else if "`v'"=="own100" {
+ 15.           local ylab "`r'/Non-`r' Ownership Gap (perc. pt.)"
+ 16.         }
+ 17.       
+.       #delimit ;
+delimiter now ;
+.         tsline `r'_rgap_`v'_p25 `r'_rgap_`v'_p50 `r'_rgap_`v'_p75,
+> 
+>         lwidth(thin thick thin)
+>         lpattern(dash solid solid)
+> 
+>         msymbol(circle diamond square)
+>       
+>         legend(ring(0) pos(5) col(1) region(style(none)) order(1 "25-th Perc. Inc. Rank
+> " 2 "50-th Perc. Inc. Rank" 3 "75-th Perc. Inc. Rank"))
+>       
+>         xlabel(1980(10)2020, grid gstyle(major) glstyle(dot) glcolor(black) glwidth(sma
+> ll))
+>         ylabel(-20(5)20, grid gstyle(major) glstyle(dot) glcolor(black) glwidth(small))
+>         yline(0,lcolor(black) lwidth(thin))
+>       
+>         ytitle("`ylab'")
+>         xtitle("Year")
+>       
+>       
+>         name(`r'_`v')
+>       
+>         ;
+ 18.       #delimit cr
+delimiter now cr
+.         graph export "`output'/`r'_extended_rgap_`v'.pdf", as(pdf) name(`r'_`v') replac
+> e
+ 19.       }
+ 20.       restore
+ 21.     }
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//asian_extended_rgap_rentgrs.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//asian_extended_rgap_valueh.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//asian_extended_rgap_own100.pdf saved as PDF
+    format
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//chinese_extended_rgap_rentgrs.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//chinese_extended_rgap_valueh.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//chinese_extended_rgap_own100.pdf saved as PDF
+    format
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//japanese_extended_rgap_rentgrs.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//japanese_extended_rgap_valueh.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//japanese_extended_rgap_own100.pdf saved as PDF
+    format
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//korean_extended_rgap_rentgrs.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//korean_extended_rgap_valueh.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//korean_extended_rgap_own100.pdf saved as PDF
+    format
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//vietnamese_extended_rgap_rentgrs.pdf saved as
+    PDF format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//vietnamese_extended_rgap_valueh.pdf saved as
+    PDF format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//vietnamese_extended_rgap_own100.pdf saved as
+    PDF format
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//filipino_extended_rgap_rentgrs.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//filipino_extended_rgap_valueh.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//filipino_extended_rgap_own100.pdf saved as PDF
+    format
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//indian_extended_rgap_rentgrs.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//indian_extended_rgap_valueh.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//indian_extended_rgap_own100.pdf saved as PDF
+    format
+
+Time variable: year, 2000 to 2019, but with gaps
+        Delta: 1 unit
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//black_extended_rgap_rentgrs.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//black_extended_rgap_valueh.pdf saved as PDF
+    format
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+(note:  named style small not found in class linewidth, default attributes used)
+(note:  linewidth not found in scheme, default attributes used)
+file /Volumes/TD1/mason/housing/output//black_extended_rgap_own100.pdf saved as PDF
+    format
+.   }
+
+. 
+. /********************************
+> * 1980 Gap Graphics             *
+> ********************************/
+.         if `gapGraph' { 
+.                 use "`data'/IPUMS-USA_Extension-correct.dta", clear
+.                 
+.                 local races "asian chinese japanese korean vietnamese indian filipino b
+> lack"
+.                 foreach r of local races{
+  2.                         preserve
+  3.                                 drop if year!=1980
+  4.                                 
+.                                 gen rent_inc = 100*rentgrs/(inctot/12) if inctot>0
+  5.                                 gen hval_inc = valueh/(inctot/12) if inctot>0
+  6.                         
+.                                 xtile rentp = rentgrs [aw=hhwt], nq(100)
+  7.                                 xtile valuep = valueh [aw=hhwt], nq(100)
+  8.                                 xtile incp = inctot [aw=hhwt], nq(100)
+  9.                                 
+.                                 gen `r'_b = incp if `r'==1
+ 10.                                 
+.                                 reg rentp i.`r'_b
+ 11.                                 
+.                                 //2a, 2c, 2e
+.                                 
+.                                 #delimit ;
+delimiter now ;
+.                                 binscatter rentp incp [aw=hhwt],
+>                                 by(`r') nq(50)
+>                                 linetype(qfit)
+>         msymbol(circle diamond square)
+>                                 name(`r'_Fig2a,replace)
+>                                 title("Rent Rank Gap in 1980")
+>                                 ytitle("Rent Rank")
+>                                 xtitle("Income Rank")
+>                                 legend(ring(0) pos(1) col(1))
+>                                 ;
+ 12.                                 #delimit cr
+delimiter now cr
+.                                 graph export "`output'/`r'_2a.pdf", as(pdf) name(`r'_Fi
+> g2a) replace
+ 13.                                 
+.                                 #delimit
+delimiter now ;
+.                                 binscatter valuep incp [aw=hhwt],
+>                                 by(`r') nq(50)
+>                                 linetype(qfit)
+>         msymbol(circle diamond square)
+>                                 name(`r'_Fig2c,replace)
+>                                 title("House Price Rank Gap in 1980")
+>                                 ytitle("Price Rank")
+>                                 xtitle("Income Rank")
+>                                 legend (ring(0) pos(1) col(1))
+>                                 ;
+ 14.                                 #delimit cr
+delimiter now cr
+.                                 graph export "`output'/`r'_2c.pdf", as(pdf) name(`r'_Fi
+> g2c) replace
+ 15.                                 
+.                                 gen own100 = 100*(1-renter)
+ 16.                                 
+.                                 #delimit ;
+delimiter now ;
+.                                 binscatter own100 incp [aw=hhwt],
+>                                 by(`r') nq(50)
+>                                 linetype(qfit)
+>         msymbol(circle diamond square)
+>                                 name(`r'_Fig2e,replace)
+>                                 title("Ownership Rate Gaps in 1980")
+>                                 ytitle("Ownership Rate")
+>                                 xtitle("Income Rank")
+>                                 legend (ring(0) pos(1) col(1))
+>                                 ;
+ 17.                                 #delimit cr
+delimiter now cr
+.                                 graph export "`output'/`r'_2e.pdf", as(pdf) name(`r'_Fi
+> g2e) replace
+ 18.                         restore 
+ 19.                 }
+(30,675,965 observations deleted)
+nquantiles() must be less than or equal to number of observations plus one
+r(198);
+.         }               
+r(198);
+
+end of do-file
+r(198);

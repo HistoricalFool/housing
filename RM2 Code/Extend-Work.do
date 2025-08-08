@@ -25,9 +25,9 @@
 	local prepDummies = 0
 	local prepDecDummies = 0
 	local gapReg = 0
-	local doGraph = 1
-	local gapGraph = 1
-	local tabReg = 1
+	local doGraph = 0
+	local gapGraph = 0
+	local tabReg = 0
 	local bwReg	= 1
 	
 /********************************
