@@ -24,7 +24,7 @@
 	local prepDec = 0
 	local prepDummies = 0
 	local prepDecDummies = 0
-	local gapReg = 1
+	local gapReg = 0
 	local doGraph = 1
 	local gapGraph = 1
 	local tabReg = 1
@@ -212,7 +212,7 @@ if `gapReg'{
 * 5. Graphing                   *
 ********************************/	
 if `doGraph' {
-	use "`data'graph_gap.dta", clear
+	use "`data'/graph_gap.dta", clear
 	local races "asian chinese japanese korean vietnamese filipino indian black"
 	foreach r of local races {
     preserve
