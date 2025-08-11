@@ -20,15 +20,15 @@
 	
 	log using `output'/RM2_output.txt, replace
 	
-	local prepRaw = 0
-	local prepDec = 0
-	local prepDummies = 0
-	local prepDecDummies = 0
-	local gapReg = 0
-	local doGraph = 0
+	local prepRaw = 1
+	local prepDec = 1
+	local prepDummies = 1
+	local prepDecDummies = 1
+	local gapReg = 1
+	local doGraph = 1
 	local gapGraph = 1
-	local tabReg = 0
-	local bwReg	= 0
+	local tabReg = 1
+	local bwReg	= 1
 	
 /********************************
 * 2. Data Setup (Percentiles)   *

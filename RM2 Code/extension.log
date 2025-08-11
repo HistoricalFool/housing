@@ -1,20 +1,14 @@
 
   ___  ____  ____  ____  ____ ®
  /__    /   ____/   /   ____/      Stata 18.0
-___/   /   /___/   /   /___/       BE—Basic Editio
-> n
+___/   /   /___/   /   /___/       BE—Basic Edition
 
- Statistics and Data Science       Copyright 1985-
-> 2023 StataCorp LLC
+ Statistics and Data Science       Copyright 1985-2023 StataCorp LLC
                                    StataCorp
-                                   4905 Lakeway Dr
-> ive
-                                   College Station
-> , Texas 77845 USA
-                                   800-782-8272   
->      https://www.stata.com
-                                   979-696-4600   
->      service@stata.com
+                                   4905 Lakeway Drive
+                                   College Station, Texas 77845 USA
+                                   800-782-8272        https://www.stata.com
+                                   979-696-4600        service@stata.com
 
 Stata license: Single-user  perpetual
 Serial number: 301806304604
@@ -23,182 +17,128 @@ Serial number: 301806304604
 
 Notes:
       1. Stata is running in batch mode.
-      2. Unicode is supported; see help
-          unicode_advice.
+      2. Unicode is supported; see help unicode_advice.
 
 . do extension.do 
 
-. /***********************************************
-> ******************************* 
+. /****************************************************************************** 
 > * Stata program:        extension_data_create
 > * --------------
 > *
-> * Author:                       Tate Mason, UNCC
-> , dmason27@uncc.edu
+> * Author:                       Tate Mason, UNCC, dmason27@uncc.edu
 > * -------
 > *
 > * Date:                         02/25/2024 
 > * -----
 > *
-> ************************************************
-> ******************************/
+> ******************************************************************************/
 .         
-.         /***************************************
-> ************************** (1) Setup basic stata
->  environment variables
->         ****************************************
-> *************************/
+.         /***************************************************************** (1) Setup basic stata environment variables
+>         *****************************************************************/
 . 
-.                 #delimit cr             // make 
-> carriage return the command delimiter
+.                 #delimit cr             // make carriage return the command delimiter
 delimiter now cr
-.                 clear                           
-> //clear data in memory
+.                 clear                           //clear data in memory
 
-.                 clear all                       
-> //clear all variables in memory
+.                 clear all                       //clear all variables in memory
 
-.                 set more off            //turn t
-> he "more" option for screen output off
+.                 set more off            //turn the "more" option for screen output off
 
 . 
-.                 local rootPath "/Volumes/TD1/mas
-> on/housing/"
+.                 local rootPath "/Volumes/TD1/mason/housing/"
 
 .                 
-.                 local codePath "`rootPath'/RM2 C
-> ode"
+.                 local codePath "`rootPath'/RM2 Code"
 
-.                 local dataPath "`rootPath'/RM2-D
-> ata"
+.                 local dataPath "`rootPath'/RM2-Data"
 
-.                 local outputPath "`rootPath'/out
-> put"
+.                 local outputPath "`rootPath'/output"
 
 .                 
 .                 
 .                 
-.                 //local rawDataPath "/Volumes/El
-> ements/data/Census"
+.                 //local rawDataPath "/Volumes/Elements/data/Census"
 .                 
 . 
 .                 cap log close
 
-.                 //log using `outputPath'extensio
-> n_data_create.txt, replace
+.                 //log using `outputPath'extension_data_create.txt, replace
 .         
 .         
 .                 
-.         /***************************************
-> **************************
->         * (1) Prepare and collapse IPUMS-USA Dat
-> a
->         ****************************************
-> *************************/
+.         /*****************************************************************
+>         * (1) Prepare and collapse IPUMS-USA Data
+>         *****************************************************************/
 .                 
 .                         
 .                 local readRaw 1
 
 .                 if `readRaw' {
 .                 
-.                         use "`dataPath'/usa_0002
-> 5.dta", clear //with education and occ
-.                         keep if inlist(gq,1,2,5)
->  //drop peopel in group quarters
-(2,867,390 observations deleted)
+.                         use "`dataPath'/usa_00025.dta", clear //with education and occ
+.                         keep if inlist(gq,1,2,5) //drop peopel in group quarters
+(1,803,370 observations deleted)
 .                         
 .                         /*
->                         INCTOT Specific Variable
->  Codes 
->                         -009995 = -$9,900 (1980)
->  
->                         -000001 = Net loss (1950
-> ) 
+>                         INCTOT Specific Variable Codes 
+>                         -009995 = -$9,900 (1980) 
+>                         -000001 = Net loss (1950) 
 >                         0000000 = None 
->                         0000001 = $1 or break ev
-> en (2000, 2005-onward ACS and PRCS) 
+>                         0000001 = $1 or break even (2000, 2005-onward ACS and PRCS) 
 >                         9999999 = N/A
 >                         
 >                         */
 .                         
 .                         local vars "inctot"
-.                         foreach v of local vars 
-> {
-  2.                                 replace `v' =
->  . if inlist(`v',-009995,-000001,0000001,0000000
-> ,9999999)
+.                         foreach v of local vars {
+  2.                                 replace `v' = . if inlist(`v',-009995,-000001,0000001,0000000,9999999)
   3.                         }
-(23,147,184 real changes made, 23,147,184 to missi
-> ng)
+(24,227,825 real changes made, 24,227,825 to missing)
 .                         
 .                         /*
->                         //deal with top coded va
-> lues
->                         //use David Autor's meth
-> od from: Trends in U.S. Wage Inequality: Revisin
-> g the Revisionists
->                         David H. Autor, Lawrence
->  F. Katz and Melissa S. Kearney
->                         Review of Economics and 
-> Statistics, May 2008.
+>                         //deal with top coded values
+>                         //use David Autor's method from: Trends in U.S. Wage Inequality: Revising the Revisionists
+>                         David H. Autor, Lawrence F. Katz and Melissa S. Kearney
+>                         Review of Economics and Statistics, May 2008.
 >                         
 >                         
 >                                 INCTOT
->                                 Census  Bottom C
-> ode     Top Code
->                                 1950    Net loss
->         $10,000
->                                 1960    -$9,900 
-> $25,000
->                                 1970    -$9,900 
-> $50,000
->                                 1980    -$9,990 
-> $75,000
+>                                 Census  Bottom Code     Top Code
+>                                 1950    Net loss        $10,000
+>                                 1960    -$9,900 $25,000
+>                                 1970    -$9,900 $50,000
+>                                 1980    -$9,990 $75,000
 >                                 
->                                 1990    -$19,998
->          $400,000* //already corrected
+>                                 1990    -$19,998         $400,000* //already corrected
 >                                 
->                                 2000    -$20,000
->         $999,998
->                                 ACS     -$19,998
->         -
->                                 PRCS    -$19,998
->         -
+>                                 2000    -$20,000        $999,998
+>                                 ACS     -$19,998        -
+>                                 PRCS    -$19,998        -
 > 
 >                         
 >                         */
 .                         
 .                         /*
->                         INCWAGE Specific Variabl
-> e Codes 
+>                         INCWAGE Specific Variable Codes 
 >                         999999 = N/A 
 >                         999998 = Missing
 >                         */
 .                         
 .                         
 .                         local vars "incwage"
-.                         foreach v of local vars 
-> {
-  2.                                 replace `v' =
->  . if inlist(`v',999999,999998)
+.                         foreach v of local vars {
+  2.                                 replace `v' = . if inlist(`v',999999,999998)
   3.                         }
-(16,256,507 real changes made, 16,256,507 to missi
-> ng)
+(16,409,458 real changes made, 16,409,458 to missing)
 .                         
 .                         /*      
 >                         
->                         //deal with top coded va
-> lues
->                                 //use David Auto
-> r's method from: Trends in U.S. Wage Inequality:
->  Revising the Revisionists
->                                 David H. Autor, 
-> Lawrence F. Katz and Melissa S. Kearney
->                                 Review of Econom
-> ics and Statistics, May 2008.
+>                         //deal with top coded values
+>                                 //use David Autor's method from: Trends in U.S. Wage Inequality: Revising the Revisionists
+>                                 David H. Autor, Lawrence F. Katz and Melissa S. Kearney
+>                                 Review of Economics and Statistics, May 2008.
 >                                 
->                                 They windsorize 
-> by multiplying by 1.5
+>                                 They windsorize by multiplying by 1.5
 >                         
 >                                 INCWAGE
 >                                 Census  Top Code
@@ -208,657 +148,445 @@ delimiter now cr
 >                                 1970    $50,000
 >                                 1980    $75,000
 >                                 
->                                 1990     $140,00
-> 0*
->                                 2000      $175,0
-> 00**
->                                 ACS (2000-2002) 
->   $200,000**
->                                 ACS (2003-onward
-> )        99.5th Percentile in State**
->                                  PRCS (2005-onwa
-> rd)      99.5th Percentile in State**
+>                                 1990     $140,000*
+>                                 2000      $175,000**
+>                                 ACS (2000-2002)   $200,000**
+>                                 ACS (2003-onward)        99.5th Percentile in State**
+>                                  PRCS (2005-onward)      99.5th Percentile in State**
 >                         
 >                         */
 .                         
 .                         /*
->                         FTOTINC Specific Variabl
-> e Codes 
->                         -000001 = Net loss (1950
-> ) 
->                         0000000 = No income (195
-> 0-2000, ACS/PRCS) 
->                         9999998 = Not ascertaine
-> d (1950) 
+>                         FTOTINC Specific Variable Codes 
+>                         -000001 = Net loss (1950) 
+>                         0000000 = No income (1950-2000, ACS/PRCS) 
+>                         9999998 = Not ascertained (1950) 
 >                         9999999 = N/A
 >                         */
 .                         
 .                         local vars "ftotinc"
-.                         foreach v of local vars 
-> {
-  2.                                 replace `v' =
->  . if inlist(`v',-000001,0000000,9999998,9999999
-> )
+.                         foreach v of local vars {
+  2.                                 replace `v' = . if inlist(`v',-000001,0000000,9999998,9999999)
   3.                         
 .                         }
-(987,897 real changes made, 987,897 to missing)
+(853,105 real changes made, 853,105 to missing)
 .                         
 .                                         
 .                         
 .                         /*
->                         INCOTHER Specific Variab
-> le Codes 
+>                         INCOTHER Specific Variable Codes 
 >                         -0001 = Net loss (1950) 
 >                         99999 = N/A
 >                         
 >                         */
 .                         
 .                         local vars "incother"
-.                         foreach v of local vars 
-> {
-  2.                                 replace `v' =
->  . if inlist(`v',-0001,99999)
+.                         foreach v of local vars {
+  2.                                 replace `v' = . if inlist(`v',-0001,99999)
   3.                         }
-(15,466,549 real changes made, 15,466,549 to missi
-> ng)
+(15,883,375 real changes made, 15,883,375 to missing)
 .                         
-.                         /***********************
-> ******************************************
->                         * Business/Farm Income: 
-> This is income from non-incorporated
->                         * business activities. T
-> his includes "self employemnt". If the
->                         * business is incorporat
-> ed, then the income is supposed to be
->                         * counted in incwage, ev
-> en if the person has an ownership stake.
->                         ************************
-> *****************************************/
+.                         /*****************************************************************
+>                         * Business/Farm Income: This is income from non-incorporated
+>                         * business activities. This includes "self employemnt". If the
+>                         * business is incorporated, then the income is supposed to be
+>                         * counted in incwage, even if the person has an ownership stake.
+>                         *****************************************************************/
 .                         
 .                         
 .                                 /*
->                                 INCBUS Specific 
-> Variable Codes 
->                                 -09995 = -$9,900
->  (1970) 
+>                                 INCBUS Specific Variable Codes 
+>                                 -09995 = -$9,900 (1970) 
 >                                 999999 = N/A
 >                                 
 >                                 */
 .                                 
-.                                 local vars "incb
-> us"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',-09995,999999)
+.                                 local vars "incbus"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',-09995,999999)
   3.                                 }
-(1,083,227 real changes made, 1,083,227 to missing
-> )
+(9,021,123 real changes made, 9,021,123 to missing)
 .                                 
 .                         
 .                                 /*
->                                 INCFARM Specific
->  Variable Codes 
->                                 -09995 = -$9,990
->  (1980) 
+>                                 INCFARM Specific Variable Codes 
+>                                 -09995 = -$9,990 (1980) 
 >                                 999999 = N/A
 >                                 */
 .                                 
-.                                 local vars "incf
-> arm"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',-09995,999999)
+.                                 local vars "incfarm"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',-09995,999999)
   3.                                 }
-(1,083,227 real changes made, 1,083,227 to missing
-> )
+(9,020,109 real changes made, 9,020,109 to missing)
 .                                 
 .                                 /*
->                                 INCBUS00 Specifi
-> c Variable Codes 
->                                 000001 = $1 or b
-> reak even (2000, 2005-2007 ACS) 
+>                                 INCBUS00 Specific Variable Codes 
+>                                 000001 = $1 or break even (2000, 2005-2007 ACS) 
 >                                 999999 = N/A
 >                                 */
 .                                 
-.                                 local vars "incb
-> us00"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',999999)
+.                                 local vars "incbus00"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',999999)
   3.                                 }
-(14,383,322 real changes made, 14,383,322 to missi
-> ng)
+(4,120,087 real changes made, 4,120,087 to missing)
 .                                 
-.                                 /***************
-> ************************************************
-> **
->                                 * Harmonized bus
-> iness/farm income variable
->                                 * See: https://u
-> sa.ipums.org/usa-action/variables/INCTOT#compara
-> bility_section
->                                 ****************
-> ************************************************
-> */
+.                                 /*****************************************************************
+>                                 * Harmonized business/farm income variable
+>                                 * See: https://usa.ipums.org/usa-action/variables/INCTOT#comparability_section
+>                                 *****************************************************************/
 .                                         
-.                                         local va
-> rs "incbus incfarm incbus00"
+.                                         local vars "incbus incfarm incbus00"
 .                                         
-.                                         foreach 
-> v of local vars {
-  2.                                              
->    
-.                                                 
-> rename `v' raw_`v'
-  3.                                              
->    
+.                                         foreach v of local vars {
+  2.                                                 
+.                                                 rename `v' raw_`v'
+  3.                                                 
 .                                         }
+.                                                         
+.                                         gen incbus = . 
+(66,076,334 missing values generated)
+.                                         label variable incbus "Harmonized Business/Farm Income"
 .                                                 
->         
-.                                         gen incb
-> us = . 
-(79,154,500 missing values generated)
-.                                         label va
-> riable incbus "Harmonized Business/Farm Income"
-.                                                 
-.                                         replace 
-> incbus = raw_incbus+raw_incfarm if inlist(year,1
-> 970,1980,1990)
-(2,860,672 real changes made)
-.                                         replace 
-> incbus = raw_incbus00 if year>=2000
-(60,827,279 real changes made)
+.                                         replace incbus = raw_incbus+raw_incfarm if inlist(year,1970,1980,1990)
+(26,817,460 real changes made)
+.                                         replace incbus = raw_incbus00 if year>=2000
+(15,642,188 real changes made)
 .                                 
 .                                         
 .                                         
-.                         /***********************
-> ******************************************
+.                         /*****************************************************************
 >                         * Transfers
->                         ************************
-> *****************************************/
+>                         *****************************************************************/
 .                         
 .                         
 .                                 /*
->                                 INCWELFR Specifi
-> c Variable Codes 
+>                                 INCWELFR Specific Variable Codes 
 >                                 99999 = N/A
 >                                 */
 .                                 
-.                                 local vars "incw
-> elfr"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',99999)
+.                                 local vars "incwelfr"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',99999)
   3.                                 }
-(15,466,549 real changes made, 15,466,549 to missi
-> ng)
+(12,689,549 real changes made, 12,689,549 to missing)
 .                                 
 .                                 /*
->                                 INCSUPP Specific
->  Variable Codes 
+>                                 INCSUPP Specific Variable Codes 
 >                                 99999 = N/A
 >                                 */
-.                                 local vars "incs
-> upp"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',99999)
+.                                 local vars "incsupp"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',99999)
   3.                                 }
-(14,383,322 real changes made, 14,383,322 to missi
-> ng)
+(4,120,087 real changes made, 4,120,087 to missing)
 .                         
-.                         /***********************
-> ******************************************
+.                         /*****************************************************************
 >                         * Investment Income
->                         ************************
-> *****************************************/
+>                         *****************************************************************/
 .                         
 .                         
 .                                 /*
->                                 INCINVST Specifi
-> c Variable Codes 
->                                 -09995 = -$9,990
->  (1980) 
->                                 000001 = $1 or b
-> reak even (1990, 2000, ACS, PRCS) 
+>                                 INCINVST Specific Variable Codes 
+>                                 -09995 = -$9,990 (1980) 
+>                                 000001 = $1 or break even (1990, 2000, ACS, PRCS) 
 >                                 999999 = N/A
 >                                 */
 .                                 /*
->                                 local vars "inci
-> nvst"
->                                 foreach v of loc
-> al vars {
->                                         replace 
-> `v' = . if inlist(`v',-09995,999999)
+>                                 local vars "incinvst"
+>                                 foreach v of local vars {
+>                                         replace `v' = . if inlist(`v',-09995,999999)
 >                                 }
 >                           */
-.                         /***********************
-> ******************************************
+.                         /*****************************************************************
 >                         * Retirement Income
->                         ************************
-> *****************************************/
+>                         *****************************************************************/
 .                         
 .                                 /*
->                                 INCSS Specific V
-> ariable Codes 
+>                                 INCSS Specific Variable Codes 
 >                                 99999 = N/A
 >                                 */      
 .                                 
-.                                 local vars "incs
-> s"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',99999)
+.                                 local vars "incss"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',99999)
   3.                                 }
-(15,466,549 real changes made, 15,466,549 to missi
-> ng)
+(12,689,549 real changes made, 12,689,549 to missing)
 .                                 
 .                                 /*
->                                 INCRETIR Specifi
-> c Variable Codes 
+>                                 INCRETIR Specific Variable Codes 
 >                                 999999 = N/A
 >                                 */
 .                                 
-.                                 local vars "incr
-> etir"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',99999)
+.                                 local vars "incretir"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',99999)
   3.                                 }
 (0 real changes made)
 .                         
-.                         //income not from wages 
-> or business
+.                         //income not from wages or business
 .                         
-.                                 rename incother 
-> raw_incother
+.                                 rename incother raw_incother
 .                                 
-.                                 gen incother = i
-> nctot - incwage - incbus
-(23,278,558 missing values generated)
-.                                 label variable i
-> ncother "Income not from wages or business/farm"
+.                                 gen incother = inctot - incwage - incbus
+(29,523,343 missing values generated)
+.                                 label variable incother "Income not from wages or business/farm"
 .                         
 .                         
-.                         /***********************
-> ******************************************
+.                         /*****************************************************************
 >                         * House Values
->                         ************************
-> *****************************************/
+>                         *****************************************************************/
 .                         
 .                         
 .                                 /*
->                                 VALUEH Specific 
-> Variable Codes 
->                                 0000000 = N/A (1
-> 930) 
->                                 9999998 = Missin
-> g (1940 100%) 
->                                 9999999 = Missin
-> g (1930), N/A (1940-2000, ACS, and PRCS)
+>                                 VALUEH Specific Variable Codes 
+>                                 0000000 = N/A (1930) 
+>                                 9999998 = Missing (1940 100%) 
+>                                 9999999 = Missing (1930), N/A (1940-2000, ACS, and PRCS)
 >                                 */      
 .                                 
-.                                 local vars "valu
-> eh"
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',9999998,9999999,0000000
-> )
+.                                 local vars "valueh"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',9999998,9999999,0000000)
   3.                                 }
-(22,150,352 real changes made, 22,150,352 to missi
-> ng)
+(24,027,943 real changes made, 24,027,943 to missing)
 .                         
 .                         
-.                         /***********************
-> ******************************************
+.                         /*****************************************************************
 >                         * Rent
->                         ************************
-> *****************************************/
+>                         *****************************************************************/
 .                         
 .                         
 .                                 /*
->                                 RENT Specific Va
-> riable Codes 
+>                                 RENT Specific Variable Codes 
 >                                 0000 = N/A 
->                                 0001 = No cash r
-> ent (1980-1990) 
->                                 9998 = Missing (
-> 1940) 
->                                 9999 = No cash r
-> ent (1940)
+>                                 0001 = No cash rent (1980-1990) 
+>                                 9998 = Missing (1940) 
+>                                 9999 = No cash rent (1940)
 >                                 */      
 .                                 
-.                                 local vars "rent
-> "
-.                                 foreach v of loc
-> al vars {
-  2.                                         repla
-> ce `v' = . if inlist(`v',0000,0001,9998,9999)
+.                                 local vars "rent"
+.                                 foreach v of local vars {
+  2.                                         replace `v' = . if inlist(`v',0000,0001,9998,9999)
   3.                                 }
-(58,994,176 real changes made, 58,994,176 to missi
-> ng)
+(47,644,457 real changes made, 47,644,457 to missing)
 .                                 
 .                                 
 .                         
-.                         /***********************
-> ******************************************
+.                         /*****************************************************************
 >                         * Demographic variables
->                         ************************
-> *****************************************/
+>                         *****************************************************************/
 .                         
 .                                 //race
-.                                 recode race (4/6
-> =1) (1/3 7/9=0), gen(asian)
-(79,154,500 differences between race and asian)
+.                                 recode race (4/6=1) (1/3 7/9=0), gen(asian)
+(66,076,334 differences between race and asian)
 .                                 
-.                                 recode raced (40
-> 0/420=1) (100/399 500/997=0), gen(chinese)
-(79,154,500 differences between raced and chinese)
+.                                 recode raced (400/420=1) (100/399 500/997=0), gen(chinese)
+(66,076,334 differences between raced and chinese)
 .                                 
-.                                 recode raced (60
-> 0=1) (100/500 610/997=0), gen(filipino)
-(79,154,500 differences between raced and filipino
-> )
+.                                 recode raced (600=1) (100/500 610/997=0), gen(filipino)
+(66,076,334 differences between raced and filipino)
 .                                 
-.                                 recode raced (61
-> 0=1) (100/600 620/997=0), gen(indian)
-(79,154,500 differences between raced and indian)
+.                                 recode raced (610=1) (100/600 620/997=0), gen(indian)
+(66,076,334 differences between raced and indian)
 .                                 
-.                                 recode raced (62
-> 0=1) (100/610 630/997=0), gen(korean)
-(79,154,500 differences between raced and korean)
+.                                 recode raced (620=1) (100/610 630/997=0), gen(korean)
+(66,076,334 differences between raced and korean)
 .                                 
-.                                 recode raced (64
-> 0=1) (100/630 641/997=0), gen(vietnamese)
-(79,154,500 differences between raced and vietname
-> se)
+.                                 recode raced (640=1) (100/630 641/997=0), gen(vietnamese)
+(66,076,334 differences between raced and vietnamese)
 .                                 
-.                                 recode raced(500
-> =1) (100/420 600/997=0), gen(japanese)
-(79,154,500 differences between raced and japanese
-> )
+.                                 recode raced(500=1) (100/420 600/997=0), gen(japanese)
+(66,076,334 differences between raced and japanese)
 .                                 
-.                                 recode race(2=1)
->  (1 3/9=0), gen(black)
-(79,154,500 differences between race and black)
+.                                 recode race(2=1) (1 3/9=0), gen(black)
+(66,076,334 differences between race and black)
 .                                 
 .                                 //renter/owner
 .                                 gen renter = 0
-.                                 replace renter =
->  1 if inlist(ownershpd,21,22)
-(21,668,168 real changes made)
+.                                 replace renter = 1 if inlist(ownershpd,21,22)
+(20,384,256 real changes made)
 . 
 .         gen hotspot = 0
-.         replace hotspot = 1 if inlist(city, 6290
-> , 3020, 4930, 6810, 4610, 5430, 2870, 7000, 3730
-> , 2390, 3020, 2490, 2430, 6330, 0190, 7230, 6030
-> , 6430, 5750)
-(3,319,028 real changes made)
+.         replace hotspot = 1 if inlist(city, 6290, 3020, 4930, 6810, 4610, 5430, 2870, 7000, 3730, 2390, 3020, 2490, 2430, 6330, 0190, 7230, 6030, 6430, 5750)
+(3,214,121 real changes made)
 .                                 
-.                                 //variables that
->  we'll keep only for the head
-.                                 replace metarea 
-> = met2013 if year > 2011
+.                                 //variables that we'll keep only for the head
+.                                 replace metarea = met2013 if year > 2011
 variable metarea was int now long
-(33,642,805 real changes made)
-.                                         local he
-> ad_vars "renter rent rentgrs valueh age chinese 
-> japanese filipino indian korean vietnamese asian
->  black educ occ1990 ind1990 statefip metro metar
-> ea farm hhtype sex builtyr builtyr2 bedrooms cit
-> y yrimmig hotspot"
-.                                         //Have b
-> een including the statefip and metarea variables
->  as they are in the control vector. Unsure how t
-> o collapse to use them and make the code work.//
-.                                         replace 
-> metarea = met2013 if year > 2011
+(3,088,232 real changes made)
+.                                         local head_vars "renter rent rentgrs valueh age chinese japanese filipino indian korean vietnamese asian black educ occ1990 ind1990 statef
+> ip metro metarea farm hhtype sex builtyr builtyr2 bedrooms city yrimmig hotspot"
+.                                         //Have been including the statefip and metarea variables as they are in the control vector. Unsure how to collapse to use them and make th
+> e code work.//
+.                                         replace metarea = met2013 if year > 2011
 (0 real changes made)
-.                                         foreach 
-> v of local head_vars {
-  2.                                              
->    
-.                                                 
-> replace `v' = . if pernum!=1 //only keep data fo
-> r household head
+.                                         foreach v of local head_vars {
+  2.                                                 
+.                                                 replace `v' = . if pernum!=1 //only keep data for household head
   3.                                         }
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(11,540,267 real changes made, 11,540,267 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(34,855,446 real changes made, 34,855,446 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(42,120,893 real changes made, 42,120,893 to missi
-> ng)
-(45,508,186 real changes made, 45,508,186 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
-(12,779,260 real changes made, 12,779,260 to missi
-> ng)
-(44,893,786 real changes made, 44,893,786 to missi
-> ng)
-(46,231,366 real changes made, 46,231,366 to missi
-> ng)
-(42,120,893 real changes made, 42,120,893 to missi
-> ng)
-(46,231,366 real changes made, 46,231,366 to missi
-> ng)
-(47,568,789 real changes made, 47,568,789 to missi
-> ng)
+(42,271,313 real changes made, 42,271,313 to missing)
+(11,126,990 real changes made, 11,126,990 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(27,477,687 real changes made, 27,477,687 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(31,949,661 real changes made, 31,949,661 to missing)
+(38,375,547 real changes made, 38,375,547 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
+(38,681,781 real changes made, 38,681,781 to missing)
+(12,007,784 real changes made, 12,007,784 to missing)
+(39,596,475 real changes made, 39,596,475 to missing)
+(35,700,544 real changes made, 35,700,544 to missing)
+(32,296,931 real changes made, 32,296,931 to missing)
+(42,271,313 real changes made, 42,271,313 to missing)
 .                                 
 .                                 
-.                         /***********************
-> ******************************************
+.                         /*****************************************************************
 >                         * Collpase to Household
->                         * For demographics, we t
-> ake the head's characteristics
->                         ************************
-> *****************************************/
+>                         * For demographics, we take the head's characteristics
+>                         *****************************************************************/
 .                                 
-.                                 collapse (first)
->  `head_vars' (sum) inc* , by(year serial hhwt)
+.                                 collapse (first) `head_vars' (sum) inc* , by(year serial hhwt)
 .                                 
-.                                 keep if inctot>0
->  //only keep households with positive income
-(362,983 observations deleted)
-.                                 keep if year>=19
-> 40 //no house values/rents in 1950
+.                                 keep if inctot>0 //only keep households with positive income
+(282,615 observations deleted)
+.                                 keep if year>=1940 //no house values/rents in 1950
 (0 observations deleted)
 .                                 
-.                                 replace rent = .
->  if !renter //rent only for renters
+.                                 replace rent = . if !renter //rent only for renters
 (0 real changes made)
-.                                 //replace rent =
->  . if rent<=0 //rent only if >0
+.                                 //replace rent = . if rent<=0 //rent only if >0
 .                                 
-.                                 replace rentgrs 
-> = . if !renter //rent only for renters
-(21,807,454 real changes made, 21,807,454 to missi
-> ng)
-.                                 //replace rentgr
-> s = . if rentgrs<=0 //rent only if >0
+.                                 replace rentgrs = . if !renter //rent only for renters
+(14,571,706 real changes made, 14,571,706 to missing)
+.                                 //replace rentgrs = . if rentgrs<=0 //rent only if >0
 .                                 
-.                                 replace valueh =
->  . if renter //house value only if not renter
+.                                 replace valueh = . if renter //house value only if not renter
 (0 real changes made)
-.                                 //replace valueh
->  = . if valueh<=0 //house value only if >0
-.                                                 
->                 
-.                                 //keep if inlist
-> (year,1960, 2019)
+.                                 //replace valueh = . if valueh<=0 //house value only if >0
+.                                                                 
+.                                 //keep if inlist(year,1960, 2019)
 .                                 
-.                                 save "`dataPath'
-> /IPUMS-USA_Extension.dta", replace
-file
-    /Volumes/TD1/mason/housing//RM2-Data/IPUMS-U
-    > SA_Extension.dta saved
+.                                 save "`dataPath'/IPUMS-USA_Extension.dta", replace
+file /Volumes/TD1/mason/housing//RM2-Data/IPUMS-USA_Extension.dta saved
 .   }
 
 .                 
 .                                         
-.         /***************************************
-> **************************
+.         /*****************************************************************
 >         * (3) Create variables for plots
->         ****************************************
-> *************************/
+>         *****************************************************************/
 .                         
-.                         use "`dataPath'/IPUMS-US
-> A_Extension.dta", clear
+.                         use "`dataPath'/IPUMS-USA_Extension.dta", clear
 
 .                         
-.                         keep if inlist(year,1980
-> , 2019)
-(29,413,489 observations deleted)
+.                         keep if inlist(year,1980, 2019)
+(15,693,294 observations deleted)
 
 .                         
-.                         gen rent_inc = 100*rentg
-> rs/(inctot/12) if inctot>0
-(903,439 missing values generated)
+.                         gen rent_inc = 100*rentgrs/(inctot/12) if inctot>0
+(4,016,093 missing values generated)
 
-.                         gen hval_inc = valueh/(i
-> nctot/12) if inctot>0
-(359,037 missing values generated)
+.                         gen hval_inc = valueh/(inctot/12) if inctot>0
+(2,729,312 missing values generated)
 
 .                         
-.                         //windsorize ratios (dro
-> p below 5th and above 95th percentile)
-.                                 local vars "rent
-> _inc hval_inc"
+.                         //windsorize ratios (drop below 5th and above 95th percentile)
+.                                 local vars "rent_inc hval_inc"
 
-.                                 winsor2 `vars' ,
->  by(year) cuts(5 95) replace
+.                                 winsor2 `vars' , by(year) cuts(5 95) replace
 
 .                                 
 .                         
 .                                 
 .                         //trim income for plots
-.                                 winsor2 inctot ,
->  by(year) suffix(_trimmed) cuts(1 99)
+.                                 winsor2 inctot , by(year) suffix(_trimmed) cuts(1 99)
 
 .                                 sum incot*
 
-    Variable |        Obs        Mean    Std. dev.
->        Min        Max
--------------+------------------------------------
-> ---------------------
-    incother |  1,262,476    23859.65    48913.71 
->      -8000    1129000
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+    incother |  6,033,633    7602.948    24575.27    -150000    1129000
 
-.                                 replace inctot_t
-> rimmed = . if inctot_trimmed != inctot
-(25,216 real changes made, 25,216 to missing)
+.                                 replace inctot_trimmed = . if inctot_trimmed != inctot
+(119,679 real changes made, 119,679 to missing)
 
 .                                 
 .                         //fraction of owners
-.                         gen own100 = 100*(1-rent
-> er)
+.                         gen own100 = 100*(1-renter)
 
 .                         
 .                         
-.                         by year: sum  inctot* re
-> nt rentgrs rent_* own* hval* valueh
+.                         by year: sum  inctot* rent rentgrs rent_* own* hval* valueh
 
---------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-> year = 1980
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+      inctot |  4,771,157    20058.99    15407.79          5     375000
+inctot_tri~d |  4,676,694    19559.83    13726.13       1105      75305
+        rent |  1,506,337    209.5837    104.6731         25        500
+     rentgrs |  1,658,503    232.5361    132.0728          0        988
+    rent_inc |  1,658,503    30.12792    25.69584          0   103.0471
+-------------+---------------------------------------------------------
+      own100 |  4,771,157    65.23898    47.62115          0        100
+    hval_inc |  2,400,882    34.95316    24.86998    9.00474   106.2323
+      valueh |  2,400,882    55969.69    37632.58       5000     200000
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -> year = 2019
 
-    Variable |        Obs        Mean    Std. dev.
->        Min        Max
--------------+------------------------------------
-> ---------------------
-      inctot |  1,262,476    96390.62      104571 
->          4    2907600
-inctot_tri~d |  1,237,260    90992.27    82062.82 
->       2750     554000
-        rent |    337,261    1077.348    682.6945 
->          4       4000
-     rentgrs |    359,037    1157.804    739.0051 
->          0       4907
-    rent_inc |    359,037      37.473    33.79761 
->          0   139.8347
--------------+------------------------------------
-> ---------------------
-      own100 |  1,262,476    71.56089    45.11241 
->          0        100
-    hval_inc |    903,439    48.25736    45.57743 
->        7.2   187.9518
-      valueh |    903,439    334906.4    448113.4 
->       1000    7681000
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+      inctot |  1,262,476    96390.62      104571          4    2907600
+inctot_tri~d |  1,237,260    90992.27    82062.82       2750     554000
+        rent |    337,261    1077.348    682.6945          4       4000
+     rentgrs |    359,037    1157.804    739.0051          0       4907
+    rent_inc |    359,037      37.473    33.79761          0   139.8347
+-------------+---------------------------------------------------------
+      own100 |  1,262,476    71.56089    45.11241          0        100
+    hval_inc |    903,439    48.25736    45.57743        7.2   187.9518
+      valueh |    903,439    334906.4    448113.4       1000    7681000
 
 
 .                         
-.         /***************************************
-> **************************
+.         /*****************************************************************
 >         * (4) Plot Graphs
->         ****************************************
-> *************************/
+>         *****************************************************************/
 .                 
-.                 local rootPath "/Volumes/TD1/mas
-> on/housing"
+.                 local rootPath "/Volumes/TD1/mason/housing"
 
 .                 
-.                 local codePath "`rootPath'/RM2 C
-> ode/"
+.                 local codePath "`rootPath'/RM2 Code/"
 
-.                 local dataPath "`rootPath'/RM2-D
-> ata/"
+.                 local dataPath "`rootPath'/RM2-Data/"
 
-.                 local outputPath "`rootPath'/out
-> put/"
+.                 local outputPath "`rootPath'/output/"
 
 .                 
-.                 label variable rent_inc "Rent/In
-> come (%)"
+.                 label variable rent_inc "Rent/Income (%)"
 
-.                 label variable hval_inc "House V
-> alue/Income (%)"
+.                 label variable hval_inc "House Value/Income (%)"
 
-.                 label variable own100 "Ownership
->  Rate (%)"
+.                 label variable own100 "Ownership Rate (%)"
 
-.                 label variable inctot_trimmed "H
-> ousehold Income (trimmed)"
+.                 label variable inctot_trimmed "Household Income (trimmed)"
 
 .                 
 .                 graph drop _all
@@ -867,8 +595,7 @@ inctot_tri~d |  1,237,260    90992.27    82062.82
 
 .                 local years "1980 2019"
 
-.                 local races "asian chinese japan
-> ese korean indian vietnamese filipino black"
+.                 local races "asian chinese japanese korean indian vietnamese filipino black"
 
 .                 
 .         foreach r of local races {
@@ -876,67 +603,106 @@ inctot_tri~d |  1,237,260    90992.27    82062.82
   3.                         
 .                         #delimit ;
 delimiter now ;
-.                         binscatter rent_inc inct
-> ot_trimmed if year==`y' & renter==1 [aw=hhwt],
+.                         binscatter rent_inc inctot_trimmed if year==`y' & renter==1 [aw=hhwt],
 >                         by(`r')
 >                         n(`nq')
 >                         linetype(none)
 >                         name(`r'_rent_inc`y')
->                         title("`y' Rent/Income R
-> atio")
+>                         title("`y' Rent/Income Ratio")
 >                         xtitle("Income")
->                         ytitle("Rent-to-income(%
-> )")
->                         legend(ring(0) pos(1) co
-> l(1))
+>                         ytitle("Rent-to-income(%)")
+>                         legend(ring(0) pos(1) col(1))
 >                         ;
   4.                         #delimit cr
 delimiter now cr
-.                         graph export "`outputPat
-> h'`r'_extend_rentsumm`y'.pdf", as(pdf) replace n
-> ame(`r'_rent_inc`y')
+.                         graph export "`outputPath'`r'_extend_rentsumm`y'.pdf", as(pdf) replace name(`r'_rent_inc`y')
   5.                         
 .                         #delimit ;
 delimiter now ;
-.                         binscatter hval_inc inct
-> ot_trimmed if year==`y' & renter==0 [aw=hhwt],
+.                         binscatter hval_inc inctot_trimmed if year==`y' & renter==0 [aw=hhwt],
 >                         by(`r')
 >                         n(`nq')
 >                         linetype(none)
 >                         name(`r'_hval_inc`y')
->                         title("`y' House Value/I
-> ncome")
+>                         title("`y' House Value/Income")
 >                         xtitle("Income")
->                         ytitle("Value-to-income 
-> Ratio")
->                         legend(ring(0) pos(1) co
-> l(1))
+>                         ytitle("Value-to-income Ratio")
+>                         legend(ring(0) pos(1) col(1))
 >                         ;
   6.                         #delimit cr
 delimiter now cr
-.                         graph export "`outputPat
-> h'`r'_extend_valuesumm`y'.pdf", as(pdf) replace 
-> name(`r'_hval_inc`y')
+.                         graph export "`outputPath'`r'_extend_valuesumm`y'.pdf", as(pdf) replace name(`r'_hval_inc`y')
   7.                         
 .                         #delimit ;
 delimiter now ;
-.                         binscatter own100 inctot
-> _trimmed if year==`y' [aw=hhwt],
+.                         binscatter own100 inctot_trimmed if year==`y' [aw=hhwt],
 >                         by(`r')
 >                         n(`nq')
 >                         linetype(none)
 >                         name(`r'_owner`y')
->                         title("`y' Ownership Rat
-> e")
+>                         title("`y' Ownership Rate")
 >                         xtitle("Income")
 >                         ytitle("Ownership rate")
->                         legend(ring(0) pos(1) co
-> l(1))
+>                         legend(ring(0) pos(1) col(1))
 >                         ;
   8.                         #delimit cr
 delimiter now cr
-.                         graph export "`outputPat
-> h'`r'_extend_ownsumm`y'.pdf", as(pdf) replace na
-> me(`r'_owner`y') 
+.                         graph export "`outputPath'`r'_extend_ownsumm`y'.pdf", as(pdf) replace name(`r'_owner`y') 
   9.                 }
  10.   }
+file /Volumes/TD1/mason/housing/output/asian_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/asian_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/asian_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/asian_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/asian_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/asian_extend_ownsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/chinese_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/chinese_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/chinese_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/chinese_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/chinese_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/chinese_extend_ownsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/japanese_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/japanese_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/japanese_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/japanese_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/japanese_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/japanese_extend_ownsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/korean_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/korean_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/korean_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/korean_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/korean_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/korean_extend_ownsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/indian_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/indian_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/indian_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/indian_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/indian_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/indian_extend_ownsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/vietnamese_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/vietnamese_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/vietnamese_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/vietnamese_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/vietnamese_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/vietnamese_extend_ownsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/filipino_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/filipino_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/filipino_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/filipino_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/filipino_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/filipino_extend_ownsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/black_extend_rentsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/black_extend_valuesumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/black_extend_ownsumm1980.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/black_extend_rentsumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/black_extend_valuesumm2019.pdf saved as PDF format
+file /Volumes/TD1/mason/housing/output/black_extend_ownsumm2019.pdf saved as PDF format
+
+.                 
+.         /*****************************************************************
+>         * End of file
+>         *****************************************************************/
+.         
+. 
+end of do-file

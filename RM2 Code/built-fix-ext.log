@@ -54,14 +54,14 @@ delimiter now cr
 
 .         
 .         replace builtyr = . if builtyr == 0
-(0 real changes made)
+(1 real change made, 1 to missing)
 
 .         replace builtyr2 = . if builtyr2 == 0
 (0 real changes made)
 
 .         
 .         gen yrbuilt = .
-(30,675,965 missing values generated)
+(21,726,927 missing values generated)
 
 . 
 . *************************************
@@ -69,45 +69,42 @@ delimiter now cr
 . *************************************           
 .                 //Builtyr variable used from 1960-2000 in sample
 .         replace yrbuilt = 65 if builtyr == 9
-(999,714 real changes made)
+(833,218 real changes made)
 
 .         replace yrbuilt = 55 if builtyr == 8
-(453,847 real changes made)
+(1,421,946 real changes made)
 
 .         replace yrbuilt = 45 if builtyr == 7
-(797,532 real changes made)
+(2,353,288 real changes made)
 
 .         replace yrbuilt = 35 if builtyr == 6
-(1,130,388 real changes made)
+(3,783,369 real changes made)
 
 .         replace yrbuilt = 25 if builtyr == 5
-(1,242,057 real changes made)
+(3,110,380 real changes made)
 
 .         replace yrbuilt = 15 if builtyr == 4
-(1,118,235 real changes made)
+(3,563,933 real changes made)
 
 .         replace yrbuilt = 8 if builtyr == 3
-(539,927 real changes made)
+(2,019,733 real changes made)
 
 .         replace yrbuilt = 3 if builtyr == 2
-(526,092 real changes made)
+(1,716,880 real changes made)
 
 .         replace yrbuilt = 1 if builtyr == 1
-(150,644 real changes made)
+(471,761 real changes made)
 
 .                 
 .                 //Builtyr2 variable used 2010 and 2019 in sample
 .                         //2010
-.         replace yrbuilt = 1 if builtyr2 == 15 & year==2010 | builtyr2 == 14 & year == 2
-> 010
+.         replace yrbuilt = 1 if builtyr2 == 15 & year==2010 | builtyr2 == 14 & year == 2010
 (6,216 real changes made)
 
-.         replace yrbuilt = 3 if builtyr2 == 13 & year == 2010 | builtyr2 == 12 & year ==
->  2010 |          builtyr2 == 11 & year == 2010 | builtyr2 == 10 & year == 2010
+.         replace yrbuilt = 3 if builtyr2 == 13 & year == 2010 | builtyr2 == 12 & year == 2010 |          builtyr2 == 11 & year == 2010 | builtyr2 == 10 & year == 2010
 (71,009 real changes made)
 
-.         replace yrbuilt = 8 if builtyr2 == 9 & year == 2010 | builtyr2 == 8 & year == 2
-> 010
+.         replace yrbuilt = 8 if builtyr2 == 9 & year == 2010 | builtyr2 == 8 & year == 2010
 (93,226 real changes made)
 
 .         replace yrbuilt = 15 if builtyr2 == 7 & year == 2010
@@ -125,28 +122,23 @@ delimiter now cr
 .         replace yrbuilt = 55 if builtyr2 == 3 & year == 2010
 (136,809 real changes made)
 
-.         replace yrbuilt = 65 if builtyr2 == 2 & year == 2010 | builtyr2 == 1 & year == 
-> 2010
+.         replace yrbuilt = 65 if builtyr2 == 2 & year == 2010 | builtyr2 == 1 & year == 2010
 (230,885 real changes made)
 
 .                 
 .                         //2019
-.         replace yrbuilt = 1 if builtyr2 == 24 & year == 2019 | builtyr2 == 23 & year ==
->  2019
+.         replace yrbuilt = 1 if builtyr2 == 24 & year == 2019 | builtyr2 == 23 & year == 2019
 (8,597 real changes made)
 
-.         replace yrbuilt = 3 if builtyr2 == 22 & year == 2019 | builtyr2 == 21 & year ==
->  2019 | builtyr2 == 20 & year == 2019 | builtyr2 == 19 & year == 2019
+.         replace yrbuilt = 3 if builtyr2 == 22 & year == 2019 | builtyr2 == 21 & year == 2019 | builtyr2 == 20 & year == 2019 | builtyr2 == 19 & year == 2019
 (40,715 real changes made)
 
-.         replace yrbuilt = 8 if builtyr2 == 18 & year == 2019 | builtyr2 == 17 & year ==
->  2019 | builtyr2 == 16 & year == 2019 | builtyr2 == 15 & year == 2019 | builtyr2 == 14 
-> & year == 2019
+.         replace yrbuilt = 8 if builtyr2 == 18 & year == 2019 | builtyr2 == 17 & year == 2019 | builtyr2 == 16 & year == 2019 | builtyr2 == 15 & year == 2019 | builtyr2 == 14 & ye
+> ar == 2019
 (38,990 real changes made)
 
-.         replace yrbuilt = 15 if builtyr2 == 13 & year == 2019 | builtyr2 == 12 & year =
-> = 2019 | builtyr2 == 11 & year == 2019 | builtyr2 == 10 & year == 2019 | builtyr2 == 9 
-> & year == 2019 
+.         replace yrbuilt = 15 if builtyr2 == 13 & year == 2019 | builtyr2 == 12 & year == 2019 | builtyr2 == 11 & year == 2019 | builtyr2 == 10 & year == 2019 | builtyr2 == 9 & ye
+> ar == 2019 
 (149,563 real changes made)
 
 .         replace yrbuilt = 25 if builtyr2 == 7 & year == 2019 
@@ -161,8 +153,7 @@ delimiter now cr
 .         replace yrbuilt = 55 if builtyr2 == 4 & year == 2019
 (134,107 real changes made)
 
-.         replace yrbuilt = 65 if builtyr2 == 3 & year == 2019 | builtyr2 == 2 & year == 
-> 2019 | builtyr2 == 1 & year == 2019
+.         replace yrbuilt = 65 if builtyr2 == 3 & year == 2019 | builtyr2 == 2 & year == 2019 | builtyr2 == 1 & year == 2019
 (357,746 real changes made)
 
 .                 
@@ -171,29 +162,29 @@ delimiter now cr
 . * Formatting Bedrooms               *
 . *************************************
 .         gen newrooms = .
-(30,675,965 missing values generated)
+(21,726,927 missing values generated)
 
 . 
 .         replace bedrooms = . if bedrooms == 0
-(0 real changes made)
+(2,487,441 real changes made, 2,487,441 to missing)
 
 .         replace newrooms = 0 if bedrooms == 1
-(522,842 real changes made)
+(385,368 real changes made)
 
 .         replace newrooms = 1 if bedrooms == 2
-(2,979,096 real changes made)
+(2,302,820 real changes made)
 
 .         replace newrooms = 2 if bedrooms == 3
-(7,607,345 real changes made)
+(5,516,465 real changes made)
 
 .         replace newrooms = 3 if bedrooms == 4
-(12,822,028 real changes made)
+(7,672,048 real changes made)
 
 .         replace newrooms = 4 if bedrooms == 5
-(5,288,487 real changes made)
+(2,662,557 real changes made)
 
 .         replace newrooms = 5 if bedrooms >= 6
-(1,456,167 real changes made)
+(3,187,669 real changes made)
 
 .         
 . *************************************
