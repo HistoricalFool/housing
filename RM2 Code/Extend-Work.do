@@ -276,9 +276,9 @@ if `doGraph' {
 				gen rent_inc = 100*rentgrs/(inctot/12) if inctot>0
 				gen hval_inc = valueh/(inctot/12) if inctot>0
 			
-				xtile rentp = rentgrs [aw=hhwt], nq(10)
-				xtile valuep = valueh [aw=hhwt], nq(10)
-				xtile incp = inctot [aw=hhwt], nq(10)
+				xtile rentp = rentgrs [aw=hhwt], nq(100)
+				xtile valuep = valueh [aw=hhwt], nq(100)
+				xtile incp = inctot [aw=hhwt], nq(100)
 				
 				gen `r'_b = incp if `r'==1
 				
@@ -288,7 +288,7 @@ if `doGraph' {
 				
 				#delimit ;
 				binscatter rentp incp [aw=hhwt],
-				by(`r') nq(10)
+				by(`r') nq(50)
 				linetype(qfit)
         msymbol(circle diamond square)
 				name(`r'_Fig2a,replace)
