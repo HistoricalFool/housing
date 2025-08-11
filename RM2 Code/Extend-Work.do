@@ -26,9 +26,9 @@
 	local prepDecDummies = 0
 	local gapReg = 0
 	local doGraph = 0
-	local gapGraph = 0
+	local gapGraph = 1
 	local tabReg = 0
-	local bwReg	= 1
+	local bwReg	= 0
 	
 /********************************
 * 2. Data Setup (Percentiles)   *
@@ -62,11 +62,7 @@
 				
 				
 			}
-			
-		
-			
 			save "`data'/fig2data.dta", replace
-		
 		}
 /********************************
 * 2. Data Setup (Deciles)       *
@@ -182,7 +178,7 @@ if `gapReg'{
 			
 			
 			local vars "rentgrs valueh own100"
-			local controls "educ age sex hhtype farm metarea statefip city yrimmig"
+			local controls "educ age sex hhtype farm metarea statefip hotspot yrimmig"
 			local years "1980,1990,2000,2010,2019"
 			
 			sum `controls'
@@ -280,9 +276,9 @@ if `doGraph' {
 				gen rent_inc = 100*rentgrs/(inctot/12) if inctot>0
 				gen hval_inc = valueh/(inctot/12) if inctot>0
 			
-				xtile rentp = rentgrs [aw=hhwt], nq(100)
-				xtile valuep = valueh [aw=hhwt], nq(100)
-				xtile incp = inctot [aw=hhwt], nq(100)
+				xtile rentp = rentgrs [aw=hhwt], nq(10)
+				xtile valuep = valueh [aw=hhwt], nq(10)
+				xtile incp = inctot [aw=hhwt], nq(10)
 				
 				gen `r'_b = incp if `r'==1
 				
@@ -292,7 +288,7 @@ if `doGraph' {
 				
 				#delimit ;
 				binscatter rentp incp [aw=hhwt],
-				by(`r') nq(50)
+				by(`r') nq(10)
 				linetype(qfit)
         msymbol(circle diamond square)
 				name(`r'_Fig2a,replace)
@@ -357,13 +353,13 @@ if `doGraph' {
 		
 		
 		local races "asian chinese japanese korean vietnamese filipino indian black"
-		local controls2 "educ age sex hhtype farm metro metarea statefip city yearimmig"
-		local years "1980 1990 2000 2010 2019"
+		local controls2 "educ age sex hhtype farm metro metarea statefip hotspot yearimmig"
+		local years "2000 2010 2019"
 		foreach r of local races {
 			foreach y of local years {
 				di "Year = `y'"
-				reg yrbuilt `r' _incr_d* `r'*city `r'*yearimmig `controls2' if year==`y'
-				reg newrooms `r' _incr_d* `r'*city `r'*yearimmig `controls2' if year==`y'
+				reg yrbuilt `r' _incr_d* `controls2' if year==`y'
+				reg newrooms `r' _incr_d* `controls2' if year==`y'
 			}
 		}
 	}
@@ -378,8 +374,8 @@ if `doGraph' {
 		drop _incr_d1
 		
 		local races "asian chinese japanese korean vietnamese filipino indian"
-		local controls2 "educ age sex hhtype farm metro metarea statefip city yearimmig"
-		local years "1980 1990 2000 2010 2019"
+		local controls2 "educ age sex hhtype farm metro metarea statefip hotspot yrimmig"
+		local years "2000 2010 2019"
     foreach r of local races {
         foreach y of local years {
             di "Year = `y', Race = `r'"
