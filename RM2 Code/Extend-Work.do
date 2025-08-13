@@ -20,13 +20,13 @@
 	
 	log using `output'/RM2_output.txt, replace
 	
-	local prepRaw = 1
-	local prepDec = 1
-	local prepDummies = 1
-	local prepDecDummies = 1
-	local gapReg = 1
-	local doGraph = 1
-	local gapGraph = 1
+	local prepRaw = 0
+	local prepDec = 0
+	local prepDummies = 0
+	local prepDecDummies = 0
+	local gapReg = 0
+	local doGraph = 0
+	local gapGraph = 0
 	local tabReg = 1
 	local bwReg	= 1
 	
@@ -345,7 +345,7 @@ if `doGraph' {
 		
 		/*local controls "educ age sex hhtype farm metro statefip city yearimmig"
 		local early "1970"
-		foreach e of local early {
+		foreach e of local early 
 			di "Year = `e'"
 			reg yrbuilt black _incr_d* `controls' if year==`e'
 			reg newrooms black _incr_d* `controls' if year==`e'
@@ -353,7 +353,7 @@ if `doGraph' {
 		
 		
 		local races "asian chinese japanese korean vietnamese filipino indian black"
-		local controls2 "educ age sex hhtype farm metro metarea statefip hotspot yearimmig"
+		local controls2 "educ age sex hhtype farm metro metarea statefip hotspot yrimmig"
 		local years "2000 2010 2019"
 		foreach r of local races {
 			foreach y of local years {
